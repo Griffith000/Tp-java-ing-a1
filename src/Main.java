@@ -1,5 +1,10 @@
 public class Main {
     public static void main(String[] args) {
-        Bureau hello = new Bureau();
+        try {
+            new Bureau();
+        } catch (java.sql.SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

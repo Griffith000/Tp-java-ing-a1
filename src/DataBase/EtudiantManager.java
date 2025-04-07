@@ -8,9 +8,9 @@ public class EtudiantManager {
     public EtudiantManager(){
         try {
             Class.forName(Config.DRIVER_NAME);
-            System.out.println("Driver loaded");
+            System.out.println("MySql Driver loaded");
         } catch (ClassNotFoundException e) {
-            System.out.println("Error loading driver");
+            System.out.println("Error loading MySql driver");
         }
 
         // Connection to the database
@@ -18,7 +18,7 @@ public class EtudiantManager {
             con = DriverManager.getConnection(Config.URL, Config.USERNAME, Config.PASSWORD);
             st = con.createStatement();
 
-            System.out.println("Connection established");
+            System.out.println("Connection to the database established");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -42,8 +42,9 @@ public class EtudiantManager {
             }
             return a;
         }
+        return 1;
     }
-    public void updateEtudiant( int id, String name, String surname, double score) throws SQLException {
+    public int updateEtudiant( int id, String name, String surname, double score) throws SQLException {
         //mise a jour
         if (st !=null) {
             String req_update = "update Etudiant set name=?, surname=?, score=? where id=?";
@@ -60,9 +61,11 @@ public class EtudiantManager {
             else{
                 System.out.println("mise a jour echouée");
             }
+            return a;
         }
+        return 1;
     }
-    public void deleteEtudiant(int id) throws SQLException {
+    public int deleteEtudiant(int id) throws SQLException {
         //suppression
         if (st !=null) {
             String req_delete = "delete from Etudiant where id=?";
@@ -76,7 +79,9 @@ public class EtudiantManager {
             else{
                 System.out.println("suppression echouée");
             }
+            return a;
         }
+        return 0;
     }
     public void  selectEtudiant() throws SQLException {
         //selection et affichage
@@ -94,6 +99,9 @@ public class EtudiantManager {
                 }
             }
         }
+        else{
+            System.out.println("selection echouée");
+        }
     }
     public ResultSet selectEtudiant(String req) throws SQLException {
         if (st !=null) {
@@ -102,6 +110,9 @@ public class EtudiantManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        else{
+            System.out.println("selection echouée");
         }
         return null;
     }

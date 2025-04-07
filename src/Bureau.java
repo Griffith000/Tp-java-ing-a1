@@ -1,6 +1,8 @@
 import javax.swing.*;
 import Forme.CurriculumForm;
 import Profil.GestionProfil;
+import DataBase.GestionEtudiant;
+import java.sql.SQLException;
 
 public class Bureau extends JFrame{
     JMenuBar mb;
@@ -9,7 +11,8 @@ public class Bureau extends JFrame{
     JDesktopPane desktop;
     GestionProfil gestionProfil;
     CurriculumForm curriculumForm;
-    Bureau() {
+    GestionEtudiant gestionEtudiant;
+    Bureau() throws SQLException {
         curriculumForm = new CurriculumForm();
         mb = new JMenuBar();
         desktop = new JDesktopPane();
@@ -24,8 +27,13 @@ public class Bureau extends JFrame{
         mb.add(swingTP);
         mb.add(baseTP);
 
+        gestionEtudiant = new GestionEtudiant();
+        gestionEtudiant.setSize(800, 600);
+        gestionEtudiant.setLocation(50, 50);
+
         desktop.add(gestionProfil);
         desktop.add(curriculumForm);
+        desktop.add(gestionEtudiant);
 
         this.add(mb);
         this.setJMenuBar(mb);

@@ -13,6 +13,7 @@ public class MyTableModel extends AbstractTableModel {
     ResultSetMetaData rsmd;
     EtudiantManager manager;
     public MyTableModel(ResultSet rs, EtudiantManager manager) throws SQLException {
+        this.manager = manager;
         rsmd=rs.getMetaData();
         while(rs.next()){
            Object[] ligne = new Object[rsmd.getColumnCount()];
@@ -55,6 +56,15 @@ public class MyTableModel extends AbstractTableModel {
     }
     public void setValueAt(Object value, int rowIndex, int columnIndex){
         data.get(rowIndex)[columnIndex]=value;
+        try {
+            int id = (int) data.get(rowIndex)[0];
+            String name = (String) data.get(rowIndex)[1];
+            String surname = (String) data.get(rowIndex)[2];
+            double score = Double.parseDouble(data.get(rowIndex)[3].toString());
+            manager.updateEtudiant(id, name, surname, score);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error updating database: " + e.getMessage());
+        }
 
     }
     int AjouterEtudiant (int id , String name, String surname, double score) throws SQLException{
@@ -65,8 +75,24 @@ public class MyTableModel extends AbstractTableModel {
         fireTableDataChanged();
         return a;
     }
+    
+    public void deleteRow(int rowIndex) {
+        try {
+            int id = (int) data.get(rowIndex)[0];
+            int result = manager.deleteEtudiant(id);
+            if (result > 0) {
+                data.remove(rowIndex);
+                fireTableDataChanged();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error deleting from database: " + e.getMessage());
+        }
+    }
+    public void updateRow(int rowIndex, int id, String name, String surname, double score) {
+        data.get(rowIndex)[0] = id;
+        data.get(rowIndex)[1] = name;
+        data.get(rowIndex)[2] = surname;
+        data.get(rowIndex)[3] = score;
+        fireTableDataChanged();
+    }
 }
-// click droite al jtable il affiche une boutton supprimer et il le suprimme de la base at l'interface graphique
-// setValuAt tu dois modifer les donnèes dans la base de donnèes
-// inserer gestionEtudiant dans le frame bureau
-//ajouter zone de saisie dans la partie south pour la recherche selon le nom et le prenom(keylistener pour le textfield)ustiliser les classe externes pour tous les action
